@@ -11,7 +11,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { useQueryClient } from "@tanstack/react-query";
 import { Trash2, ShieldAlert, Pencil, Plus, X, Images, Upload } from "lucide-react";
-import { useUpload } from "@workspace/object-storage-web";
 import { EnterpriseInput, EventInput, Enterprise } from "@workspace/api-client-react/src/generated/api.schemas";
 import { useToast } from "@/hooks/use-toast";
 import { Textarea } from "@/components/ui/textarea";
@@ -105,17 +104,29 @@ function EditEnterpriseDialog({ enterprise, onClose }: { enterprise: Enterprise;
   const [images, setImages] = useState<string[]>(parseImages(enterprise.images));
   const [newImageUrl, setNewImageUrl] = useState("");
 
-  const { uploadFile, isUploading, progress } = useUpload({
-    basePath: "/api/storage",
-    onSuccess: (response) => {
-      const servingUrl = `/api/storage${response.objectPath}`;
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+
+  const uploadFile = async (file: File) => {
+    setIsUploading(true);
+    setUploadProgress(10);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      setUploadProgress(40);
+      const res = await fetch("/api/storage/uploads", { method: "POST", body: formData });
+      setUploadProgress(90);
+      if (!res.ok) throw new Error(await res.text());
+      const { servingUrl } = await res.json();
       setImages((prev) => [...prev, servingUrl]);
       toast({ title: "Снимката е качена успешно" });
-    },
-    onError: () => {
+    } catch {
       toast({ title: "Грешка при качване на снимката", variant: "destructive" });
-    },
-  });
+    } finally {
+      setIsUploading(false);
+      setUploadProgress(0);
+    }
+  };
 
   const field = (key: keyof Enterprise, label: string, required = false, type = "text") => (
     <div className="space-y-1.5">
@@ -309,7 +320,7 @@ function EditEnterpriseDialog({ enterprise, onClose }: { enterprise: Enterprise;
                     disabled={isUploading}
                   >
                     {isUploading ? (
-                      <span className="text-xs">{progress}%</span>
+                      <span className="text-xs">{uploadProgress}%</span>
                     ) : (
                       <Upload className="w-4 h-4" />
                     )}
