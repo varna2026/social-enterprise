@@ -16,7 +16,6 @@ import { useToast } from "@/hooks/use-toast";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { ScrollArea } from "@/components/ui/scroll-area";
 
 const OBLASTS = ["Varna", "Dobrich", "Shumen", "Targovishte"];
 const KLAS = ["Klas A", "Klas A+"];
@@ -156,11 +155,11 @@ function EditEnterpriseDialog({ enterprise, onClose }: { enterprise: Enterprise;
 
   return (
     <Dialog open onOpenChange={onClose}>
-      <DialogContent className="max-w-3xl max-h-[90vh] flex flex-col">
-        <DialogHeader>
+      <DialogContent className="max-w-3xl max-h-[90vh] flex flex-col overflow-hidden">
+        <DialogHeader className="shrink-0">
           <DialogTitle>Редактиране: {enterprise.naimenovanie}</DialogTitle>
         </DialogHeader>
-        <ScrollArea className="flex-1 pr-4">
+        <div className="flex-1 overflow-y-auto pr-2 min-h-0">
           <form id="edit-form" onSubmit={handleSave} className="space-y-5 pb-4">
             <div className="grid grid-cols-2 gap-3">
               {field("naimenovanie", "Наименование", true)}
@@ -304,8 +303,8 @@ function EditEnterpriseDialog({ enterprise, onClose }: { enterprise: Enterprise;
               )}
             </div>
           </form>
-        </ScrollArea>
-        <DialogFooter className="pt-4 border-t mt-2">
+        </div>
+        <DialogFooter className="pt-4 border-t mt-2 shrink-0">
           <Button variant="outline" onClick={onClose}>Отказ</Button>
           <Button type="submit" form="edit-form" disabled={updateEnterprise.isPending}>
             {updateEnterprise.isPending ? "Запазване..." : "Запази промените"}
