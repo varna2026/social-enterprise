@@ -33,7 +33,7 @@ export default function Admin() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === "admin123") {
+    if (password === "Maria4141") {
       setIsAuthenticated(true);
     } else {
       alert("Грешна парола");
