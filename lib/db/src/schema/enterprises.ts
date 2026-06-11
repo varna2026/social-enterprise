@@ -30,6 +30,7 @@ export const enterprisesTable = pgTable("enterprises", {
   broyUyazvimiLica: integer("broy_uyazvimi_lica"),
   godinaZastoyvane: integer("godina_zastoyvane"),
   istoriyaNaUspeha: text("istoriya_na_uspeha"),
+  images: text("images"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 

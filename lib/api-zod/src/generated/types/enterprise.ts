@@ -50,4 +50,6 @@ export interface Enterprise {
   godinaZastoyvane?: number | null;
   /** @nullable */
   istoriyaNaUspeha?: string | null;
+  /** @nullable JSON array of image URLs */
+  images?: string | null;
 }

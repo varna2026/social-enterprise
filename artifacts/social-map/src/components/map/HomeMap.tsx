@@ -1,11 +1,13 @@
 import { useEffect, useRef } from "react";
 import { Link } from "wouter";
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, Tooltip, useMap } from "react-leaflet";
 import { useListEnterprises } from "@workspace/api-client-react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Enterprise } from "@workspace/api-client-react/src/generated/api.schemas";
 import { MapPin } from "lucide-react";
+
+const BASE = import.meta.env.BASE_URL.replace(/\/$/, "");
 
 function FlyTo({ enterprises, selectedId }: { enterprises: Enterprise[]; selectedId: number | null }) {
   const map = useMap();
@@ -15,7 +17,7 @@ function FlyTo({ enterprises, selectedId }: { enterprises: Enterprise[]; selecte
     if (!selectedId || selectedId === prevId.current) return;
     const ent = enterprises.find(e => e.id === selectedId);
     if (ent?.lat && ent?.lng) {
-      map.flyTo([ent.lat, ent.lng], 14, { duration: 1.2 });
+      map.flyTo([ent.lat, ent.lng], 15, { duration: 1.2 });
       prevId.current = selectedId;
     }
   }, [selectedId, enterprises, map]);
@@ -50,25 +52,35 @@ export default function HomeMap({ selectedId }: HomeMapProps) {
         <FlyTo enterprises={enterprises} selectedId={selectedId ?? null} />
         {enterprises.map((enterprise: Enterprise) => (
           <Marker key={enterprise.id} position={[enterprise.lat, enterprise.lng]}>
-            <Popup className="civic-popup">
+            <Tooltip direction="top" offset={[0, -8]} className="enterprise-name-tooltip">
+              <span className="text-xs font-semibold">{enterprise.naimenovanie}</span>
+            </Tooltip>
+            <Popup className="civic-popup" minWidth={220}>
               <div className="p-1">
-                <h3 className="font-bold text-sm mb-1">{enterprise.naimenovanie}</h3>
+                <h3 className="font-bold text-sm mb-0.5 leading-tight">{enterprise.naimenovanie}</h3>
                 <p className="text-xs text-muted-foreground mb-2 flex items-center gap-1">
-                  <MapPin className="w-3 h-3" /> {enterprise.grad}, {enterprise.oblast}
+                  <MapPin className="w-3 h-3 shrink-0" /> {enterprise.adres || enterprise.grad}, {enterprise.oblast}
                 </p>
                 <div className="flex flex-wrap gap-1 mb-3">
-                  <span className="text-[10px] px-2 py-0.5 bg-primary/10 text-primary rounded-full">
+                  <span className="text-[10px] px-2 py-0.5 bg-primary/10 text-primary rounded-full font-medium">
                     {enterprise.ikonomicheskaDeynost}
                   </span>
-                  <span className="text-[10px] px-2 py-0.5 bg-secondary/10 text-secondary rounded-full">
+                  <span className="text-[10px] px-2 py-0.5 bg-secondary/10 text-secondary-foreground rounded-full">
                     {enterprise.socialnaKauza}
                   </span>
                 </div>
                 <Link href={`/enterprises/${enterprise.id}`}>
-                  <Button size="sm" className="w-full h-8 text-xs">
+                  <Button size="sm" className="w-full h-8 text-xs mb-2">
                     Към профила
                   </Button>
                 </Link>
+                <div className="border-t pt-2 mt-1 flex justify-center">
+                  <img
+                    src={`${BASE}/marka-sp.png`}
+                    alt="Продукт на социално предприятие"
+                    className="h-8 object-contain opacity-80"
+                  />
+                </div>
               </div>
             </Popup>
           </Marker>

@@ -57,7 +57,8 @@ export const ListEnterprisesResponseItem = zod.object({
   "broyZaeti": zod.number().nullish(),
   "broyUyazvimiLica": zod.number().nullish(),
   "godinaZastoyvane": zod.number().nullish(),
-  "istoriyaNaUspeha": zod.string().nullish()
+  "istoriyaNaUspeha": zod.string().nullish(),
+  "images": zod.string().nullish()
 })
 export const ListEnterprisesResponse = zod.array(ListEnterprisesResponseItem)
 
@@ -91,7 +92,8 @@ export const CreateEnterpriseBody = zod.object({
   "broyZaeti": zod.number().optional(),
   "broyUyazvimiLica": zod.number().optional(),
   "godinaZastoyvane": zod.number().optional(),
-  "istoriyaNaUspeha": zod.string().optional()
+  "istoriyaNaUspeha": zod.string().optional(),
+  "images": zod.string().optional()
 })
 
 
@@ -129,7 +131,8 @@ export const GetEnterpriseResponse = zod.object({
   "broyZaeti": zod.number().nullish(),
   "broyUyazvimiLica": zod.number().nullish(),
   "godinaZastoyvane": zod.number().nullish(),
-  "istoriyaNaUspeha": zod.string().nullish()
+  "istoriyaNaUspeha": zod.string().nullish(),
+  "images": zod.string().nullish()
 })
 
 
@@ -166,7 +169,8 @@ export const UpdateEnterpriseBody = zod.object({
   "broyZaeti": zod.number().optional(),
   "broyUyazvimiLica": zod.number().optional(),
   "godinaZastoyvane": zod.number().optional(),
-  "istoriyaNaUspeha": zod.string().optional()
+  "istoriyaNaUspeha": zod.string().optional(),
+  "images": zod.string().optional()
 })
 
 export const UpdateEnterpriseResponse = zod.object({
@@ -196,7 +200,8 @@ export const UpdateEnterpriseResponse = zod.object({
   "broyZaeti": zod.number().nullish(),
   "broyUyazvimiLica": zod.number().nullish(),
   "godinaZastoyvane": zod.number().nullish(),
-  "istoriyaNaUspeha": zod.string().nullish()
+  "istoriyaNaUspeha": zod.string().nullish(),
+  "images": zod.string().nullish()
 })
 
 

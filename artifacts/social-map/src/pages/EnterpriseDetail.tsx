@@ -3,8 +3,15 @@ import { useParams, Link } from "wouter";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { MapPin, Globe, Phone, Mail, Facebook, Users, Heart, ArrowLeft, Lightbulb, TrendingUp } from "lucide-react";
+import { MapPin, Globe, Phone, Mail, Facebook, Users, Heart, ArrowLeft, Lightbulb, TrendingUp, ImageOff } from "lucide-react";
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
+
+const BASE = import.meta.env.BASE_URL.replace(/\/$/, "");
+
+function parseImages(raw?: string | null): string[] {
+  if (!raw) return [];
+  try { return JSON.parse(raw); } catch { return []; }
+}
 
 export default function EnterpriseDetail() {
   const { id } = useParams();
@@ -40,6 +47,8 @@ export default function EnterpriseDetail() {
     );
   }
 
+  const images = parseImages(ent.images);
+
   return (
     <div className="bg-muted/30 min-h-screen pb-16">
       {/* Header */}
@@ -73,7 +82,7 @@ export default function EnterpriseDetail() {
                 )}
               </div>
             </div>
-            
+
             {(ent.telefon || ent.email || ent.website || ent.facebook) && (
               <div className="flex flex-col gap-2 bg-muted/50 p-4 rounded-xl min-w-[250px] border border-border/50">
                 <h3 className="text-sm font-semibold mb-1 uppercase tracking-wider text-muted-foreground">Контакти</h3>
@@ -94,7 +103,7 @@ export default function EnterpriseDetail() {
             <section className="bg-background rounded-2xl p-6 md:p-8 shadow-sm border">
               <h2 className="text-xl font-bold mb-4">Кратко описание</h2>
               <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">{ent.kratkoOpisanie}</p>
-              
+
               {ent.misiya && (
                 <div className="mt-8 p-6 bg-primary/5 border border-primary/10 rounded-xl">
                   <h3 className="text-lg font-semibold text-primary flex items-center gap-2 mb-2">
@@ -105,9 +114,33 @@ export default function EnterpriseDetail() {
               )}
             </section>
 
+            {/* Photo Gallery */}
+            <section className="bg-background rounded-2xl p-6 md:p-8 shadow-sm border">
+              <h2 className="text-xl font-bold mb-5">Снимки</h2>
+              {images.length > 0 ? (
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  {images.map((url, i) => (
+                    <a key={i} href={url} target="_blank" rel="noreferrer" className="group relative overflow-hidden rounded-xl aspect-square bg-muted border hover:border-primary/40 transition-all">
+                      <img
+                        src={url}
+                        alt={`${ent.naimenovanie} - снимка ${i + 1}`}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                      />
+                    </a>
+                  ))}
+                </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center py-12 bg-muted/30 rounded-xl border border-dashed gap-3 text-muted-foreground">
+                  <ImageOff className="w-10 h-10 opacity-40" />
+                  <p className="text-sm">Снимките могат да се добавят чрез Админ панела</p>
+                </div>
+              )}
+            </section>
+
             <section className="bg-background rounded-2xl p-6 md:p-8 shadow-sm border">
               <h2 className="text-xl font-bold mb-6">Социално въздействие</h2>
-              
+
               <div className="grid sm:grid-cols-2 gap-6 mb-8">
                 <div className="space-y-4">
                   <div>
@@ -119,11 +152,11 @@ export default function EnterpriseDetail() {
                     <div className="font-medium text-foreground">{ent.celevnaGrupa}</div>
                   </div>
                 </div>
-                
+
                 <div className="space-y-4">
                   {ent.socialnaInovaciya && (
                     <div>
-                      <div className="text-sm text-muted-foreground mb-1 flex items-center gap-1"><Lightbulb className="w-3 h-3"/> Иновация</div>
+                      <div className="text-sm text-muted-foreground mb-1 flex items-center gap-1"><Lightbulb className="w-3 h-3" /> Иновация</div>
                       <div className="font-medium text-foreground">{ent.socialnaInovaciya}</div>
                     </div>
                   )}
@@ -143,7 +176,7 @@ export default function EnterpriseDetail() {
                   </div>
                 </div>
               </div>
-              
+
               {ent.istoriyaNaUspeha && (
                 <div className="mt-6 pt-6 border-t">
                   <h3 className="text-lg font-semibold flex items-center gap-2 mb-3">
@@ -153,7 +186,7 @@ export default function EnterpriseDetail() {
                 </div>
               )}
             </section>
-            
+
             {(ent.producti || ent.uslugi) && (
               <section className="bg-background rounded-2xl p-6 md:p-8 shadow-sm border">
                 <h2 className="text-xl font-bold mb-6">Продукти и Услуги</h2>
@@ -161,13 +194,25 @@ export default function EnterpriseDetail() {
                   {ent.producti && (
                     <div>
                       <h3 className="font-semibold text-lg border-b pb-2 mb-4">Продукти</h3>
-                      <p className="text-muted-foreground whitespace-pre-wrap">{ent.producti}</p>
+                      <ul className="space-y-1.5">
+                        {ent.producti.split(";").map((p, i) => p.trim() && (
+                          <li key={i} className="text-muted-foreground text-sm flex items-start gap-2">
+                            <span className="text-primary mt-1">•</span> {p.trim()}
+                          </li>
+                        ))}
+                      </ul>
                     </div>
                   )}
                   {ent.uslugi && (
                     <div>
                       <h3 className="font-semibold text-lg border-b pb-2 mb-4">Услуги</h3>
-                      <p className="text-muted-foreground whitespace-pre-wrap">{ent.uslugi}</p>
+                      <ul className="space-y-1.5">
+                        {ent.uslugi.split(";").map((u, i) => u.trim() && (
+                          <li key={i} className="text-muted-foreground text-sm flex items-start gap-2">
+                            <span className="text-primary mt-1">•</span> {u.trim()}
+                          </li>
+                        ))}
+                      </ul>
                     </div>
                   )}
                 </div>
@@ -180,14 +225,22 @@ export default function EnterpriseDetail() {
             <section className="bg-background rounded-2xl p-6 shadow-sm border">
               <h3 className="font-bold mb-4">Локация</h3>
               <p className="text-sm text-muted-foreground mb-4">{ent.adres || `${ent.grad}, обл. ${ent.oblast}`}</p>
-              <div className="h-[250px] rounded-xl overflow-hidden border">
-                <MapContainer center={[ent.lat, ent.lng]} zoom={13} style={{ height: "100%", width: "100%" }}>
+              <div className="h-[250px] rounded-xl overflow-hidden border mb-4">
+                <MapContainer center={[ent.lat, ent.lng]} zoom={14} style={{ height: "100%", width: "100%" }}>
                   <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
                   <Marker position={[ent.lat, ent.lng]} />
                 </MapContainer>
               </div>
+              {/* Brand mark */}
+              <div className="flex flex-col items-center gap-2 pt-2 border-t mt-2">
+                <img
+                  src={`${BASE}/marka-sp.png`}
+                  alt="Продукт на социално предприятие"
+                  className="h-14 object-contain"
+                />
+              </div>
             </section>
-            
+
             <section className="bg-background rounded-2xl p-6 shadow-sm border">
               <h3 className="font-bold mb-4">Икономическа дейност</h3>
               <Badge variant="secondary" className="text-sm px-3 py-1 bg-secondary/10 text-secondary-foreground">{ent.ikonomicheskaDeynost}</Badge>

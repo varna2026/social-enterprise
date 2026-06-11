@@ -33,4 +33,5 @@ export interface EnterpriseInput {
   broyUyazvimiLica?: number;
   godinaZastoyvane?: number;
   istoriyaNaUspeha?: string;
+  images?: string;
 }
