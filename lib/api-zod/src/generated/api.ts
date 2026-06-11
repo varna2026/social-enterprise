@@ -166,7 +166,8 @@ export const UpdateEnterpriseBody = zod.object({
   "broyZaeti": zod.number().optional(),
   "broyUyazvimiLica": zod.number().optional(),
   "godinaZastoyvane": zod.number().optional(),
-  "istoriyaNaUspeha": zod.string().optional()
+  "istoriyaNaUspeha": zod.string().optional(),
+  "images": zod.string().optional()
 })
 
 export const UpdateEnterpriseResponse = zod.object({

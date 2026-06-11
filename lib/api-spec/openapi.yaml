@@ -550,6 +550,8 @@ components:
           type: integer
         istoriyaNaUspeha:
           type: string
+        images:
+          type: string
 
     EnterpriseStats:
       type: object
