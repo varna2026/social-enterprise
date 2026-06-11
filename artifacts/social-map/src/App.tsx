@@ -7,9 +7,6 @@ import Layout from "@/components/layout/Layout";
 import Home from "@/pages/Home";
 import Enterprises from "@/pages/Enterprises";
 import EnterpriseDetail from "@/pages/EnterpriseDetail";
-import Stats from "@/pages/Stats";
-import Events from "@/pages/Events";
-import EventDetail from "@/pages/EventDetail";
 import Admin from "@/pages/Admin";
 
 const queryClient = new QueryClient();
@@ -21,9 +18,6 @@ function Router() {
         <Route path="/" component={Home} />
         <Route path="/enterprises" component={Enterprises} />
         <Route path="/enterprises/:id" component={EnterpriseDetail} />
-        <Route path="/stats" component={Stats} />
-        <Route path="/events" component={Events} />
-        <Route path="/events/:id" component={EventDetail} />
         <Route path="/admin" component={Admin} />
         <Route component={NotFound} />
       </Switch>

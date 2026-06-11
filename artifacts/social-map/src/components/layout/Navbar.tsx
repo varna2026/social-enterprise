@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { Map, BarChart3, Calendar, Shield, Menu, X } from "lucide-react";
+import { Map, Building2, Shield, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
@@ -9,9 +9,7 @@ export default function Navbar() {
 
   const navLinks = [
     { href: "/", label: "Начало", icon: Map },
-    { href: "/enterprises", label: "Предприятия", icon: Map },
-    { href: "/stats", label: "Статистика", icon: BarChart3 },
-    { href: "/events", label: "Събития", icon: Calendar },
+    { href: "/enterprises", label: "Предприятия", icon: Building2 },
   ];
 
   return (
@@ -29,7 +27,6 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {/* Desktop Navigation */}
           <div className="hidden md:flex md:items-center md:space-x-1">
             {navLinks.map((link) => {
               const Icon = link.icon;
@@ -59,7 +56,6 @@ export default function Navbar() {
             </div>
           </div>
 
-          {/* Mobile menu button */}
           <div className="flex md:hidden">
             <Button
               variant="ghost"
@@ -73,7 +69,6 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Navigation */}
       {isOpen && (
         <div className="md:hidden border-t">
           <div className="space-y-1 px-4 pb-3 pt-2">
