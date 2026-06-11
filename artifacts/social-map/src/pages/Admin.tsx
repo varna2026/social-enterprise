@@ -10,7 +10,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { useQueryClient } from "@tanstack/react-query";
-import { Trash2, ShieldAlert, Pencil, Plus, X, Images } from "lucide-react";
+import { Trash2, ShieldAlert, Pencil, Plus, X, Images, Upload } from "lucide-react";
+import { useUpload } from "@workspace/object-storage-web";
 import { EnterpriseInput, EventInput, Enterprise } from "@workspace/api-client-react/src/generated/api.schemas";
 import { useToast } from "@/hooks/use-toast";
 import { Textarea } from "@/components/ui/textarea";
@@ -103,6 +104,18 @@ function EditEnterpriseDialog({ enterprise, onClose }: { enterprise: Enterprise;
   const [formData, setFormData] = useState<Partial<Enterprise>>({ ...enterprise });
   const [images, setImages] = useState<string[]>(parseImages(enterprise.images));
   const [newImageUrl, setNewImageUrl] = useState("");
+
+  const { uploadFile, isUploading, progress } = useUpload({
+    basePath: "/api/storage",
+    onSuccess: (response) => {
+      const servingUrl = `/api/storage${response.objectPath}`;
+      setImages((prev) => [...prev, servingUrl]);
+      toast({ title: "Снимката е качена успешно" });
+    },
+    onError: () => {
+      toast({ title: "Грешка при качване на снимката", variant: "destructive" });
+    },
+  });
 
   const field = (key: keyof Enterprise, label: string, required = false, type = "text") => (
     <div className="space-y-1.5">
@@ -263,7 +276,7 @@ function EditEnterpriseDialog({ enterprise, onClose }: { enterprise: Enterprise;
             <div className="space-y-3 border rounded-xl p-4 bg-muted/30">
               <div className="flex items-center gap-2 text-sm font-semibold">
                 <Images className="w-4 h-4 text-primary" />
-                Снимки (URL адреси)
+                Снимки
               </div>
               <div className="flex gap-2">
                 <Input
@@ -273,9 +286,35 @@ function EditEnterpriseDialog({ enterprise, onClose }: { enterprise: Enterprise;
                   onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addImage(); } }}
                   className="h-8 text-sm flex-1"
                 />
-                <Button type="button" size="sm" variant="outline" onClick={addImage} className="h-8 px-3">
+                <Button type="button" size="sm" variant="outline" onClick={addImage} className="h-8 px-3" title="Добави URL">
                   <Plus className="w-4 h-4" />
                 </Button>
+                <label className="cursor-pointer" title="Качи файл от компютъра">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    disabled={isUploading}
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) uploadFile(file);
+                      e.target.value = "";
+                    }}
+                  />
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    className="h-8 px-3 pointer-events-none"
+                    disabled={isUploading}
+                  >
+                    {isUploading ? (
+                      <span className="text-xs">{progress}%</span>
+                    ) : (
+                      <Upload className="w-4 h-4" />
+                    )}
+                  </Button>
+                </label>
               </div>
               {images.length > 0 && (
                 <div className="grid grid-cols-3 gap-2">
@@ -299,7 +338,7 @@ function EditEnterpriseDialog({ enterprise, onClose }: { enterprise: Enterprise;
                 </div>
               )}
               {images.length === 0 && (
-                <p className="text-xs text-muted-foreground">Добавете URL адреси на снимки на продукти или услуги</p>
+                <p className="text-xs text-muted-foreground">Добавете URL или качете файл от компютъра</p>
               )}
             </div>
           </form>

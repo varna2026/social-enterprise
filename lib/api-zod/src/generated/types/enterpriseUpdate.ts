@@ -33,5 +33,4 @@ export interface EnterpriseUpdate {
   broyUyazvimiLica?: number;
   godinaZastoyvane?: number;
   istoriyaNaUspeha?: string;
-  images?: string;
 }

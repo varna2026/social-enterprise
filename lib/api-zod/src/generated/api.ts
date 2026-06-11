@@ -57,8 +57,7 @@ export const ListEnterprisesResponseItem = zod.object({
   "broyZaeti": zod.number().nullish(),
   "broyUyazvimiLica": zod.number().nullish(),
   "godinaZastoyvane": zod.number().nullish(),
-  "istoriyaNaUspeha": zod.string().nullish(),
-  "images": zod.string().nullish()
+  "istoriyaNaUspeha": zod.string().nullish()
 })
 export const ListEnterprisesResponse = zod.array(ListEnterprisesResponseItem)
 
@@ -92,8 +91,7 @@ export const CreateEnterpriseBody = zod.object({
   "broyZaeti": zod.number().optional(),
   "broyUyazvimiLica": zod.number().optional(),
   "godinaZastoyvane": zod.number().optional(),
-  "istoriyaNaUspeha": zod.string().optional(),
-  "images": zod.string().optional()
+  "istoriyaNaUspeha": zod.string().optional()
 })
 
 
@@ -131,8 +129,7 @@ export const GetEnterpriseResponse = zod.object({
   "broyZaeti": zod.number().nullish(),
   "broyUyazvimiLica": zod.number().nullish(),
   "godinaZastoyvane": zod.number().nullish(),
-  "istoriyaNaUspeha": zod.string().nullish(),
-  "images": zod.string().nullish()
+  "istoriyaNaUspeha": zod.string().nullish()
 })
 
 
@@ -169,8 +166,7 @@ export const UpdateEnterpriseBody = zod.object({
   "broyZaeti": zod.number().optional(),
   "broyUyazvimiLica": zod.number().optional(),
   "godinaZastoyvane": zod.number().optional(),
-  "istoriyaNaUspeha": zod.string().optional(),
-  "images": zod.string().optional()
+  "istoriyaNaUspeha": zod.string().optional()
 })
 
 export const UpdateEnterpriseResponse = zod.object({
@@ -200,8 +196,7 @@ export const UpdateEnterpriseResponse = zod.object({
   "broyZaeti": zod.number().nullish(),
   "broyUyazvimiLica": zod.number().nullish(),
   "godinaZastoyvane": zod.number().nullish(),
-  "istoriyaNaUspeha": zod.string().nullish(),
-  "images": zod.string().nullish()
+  "istoriyaNaUspeha": zod.string().nullish()
 })
 
 
@@ -302,6 +297,52 @@ export const GetEventResponse = zod.object({
   "myasto": zod.string().nullish(),
   "organizator": zod.string().nullish(),
   "linkRegistraciya": zod.string().nullish()
+})
+
+
+/**
+ * @summary Request a presigned URL for file upload
+ */
+
+
+
+
+
+export const RequestUploadUrlBody = zod.object({
+  "name": zod.string().min(1),
+  "size": zod.number().min(1),
+  "contentType": zod.string().min(1)
+})
+
+
+
+
+
+
+export const RequestUploadUrlResponse = zod.object({
+  "uploadURL": zod.string().url(),
+  "objectPath": zod.string(),
+  "metadata": zod.object({
+  "name": zod.string().min(1),
+  "size": zod.number().min(1),
+  "contentType": zod.string().min(1)
+}).optional()
+})
+
+
+/**
+ * @summary Serve a public asset
+ */
+export const GetPublicObjectParams = zod.object({
+  "filePath": zod.coerce.string()
+})
+
+
+/**
+ * @summary Serve an object entity
+ */
+export const GetStorageObjectParams = zod.object({
+  "objectPath": zod.coerce.string()
 })
 
 
