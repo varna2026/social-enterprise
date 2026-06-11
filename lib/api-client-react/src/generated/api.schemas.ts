@@ -53,6 +53,8 @@ export interface Enterprise {
   godinaZastoyvane?: number | null;
   /** @nullable */
   istoriyaNaUspeha?: string | null;
+  /** @nullable */
+  images?: string | null;
 }
 
 export interface EnterpriseInput {

@@ -426,6 +426,8 @@ components:
           type: ["integer", "null"]
         istoriyaNaUspeha:
           type: ["string", "null"]
+        images:
+          type: ["string", "null"]
 
     EnterpriseInput:
       type: object
