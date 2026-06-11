@@ -131,16 +131,20 @@ function EditEnterpriseDialog({ enterprise, onClose }: { enterprise: Enterprise;
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const payload = {
+      const raw = {
         ...formData,
         lat: Number(formData.lat),
         lng: Number(formData.lng),
         broyZaeti: formData.broyZaeti != null ? Number(formData.broyZaeti) : undefined,
         broyUyazvimiLica: formData.broyUyazvimiLica != null ? Number(formData.broyUyazvimiLica) : undefined,
         godinaZastoyvane: formData.godinaZastoyvane != null ? Number(formData.godinaZastoyvane) : undefined,
-        images: images.length > 0 ? JSON.stringify(images) : null,
+        images: images.length > 0 ? JSON.stringify(images) : undefined,
       };
-      await updateEnterprise.mutateAsync({ id: enterprise.id, data: payload });
+      // Zod UpdateEnterpriseBody uses .optional() (not .nullish()), so null must become undefined
+      const payload = Object.fromEntries(
+        Object.entries(raw).map(([k, v]) => [k, v === null ? undefined : v])
+      );
+      await updateEnterprise.mutateAsync({ id: enterprise.id, data: payload as Parameters<typeof updateEnterprise.mutateAsync>[0]["data"] });
       queryClient.invalidateQueries({ queryKey: getListEnterprisesQueryKey() });
       queryClient.invalidateQueries({ queryKey: getGetEnterpriseQueryKey(enterprise.id) });
       toast({ title: "Предприятието е обновено успешно" });
