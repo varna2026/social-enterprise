@@ -1,22 +1,26 @@
 openapi: 3.1.0
 info:
-  # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: API за интерактивна карта на социалните предприятия в Североизточен район
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: enterprises
+    description: Социални предприятия
+  - name: events
+    description: Събития
+  - name: stats
+    description: Статистика
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -24,6 +28,238 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /enterprises:
+    get:
+      operationId: listEnterprises
+      tags: [enterprises]
+      summary: Списък с всички социални предприятия
+      parameters:
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: oblast
+          in: query
+          schema:
+            type: string
+        - name: klas
+          in: query
+          schema:
+            type: string
+        - name: pravnaForma
+          in: query
+          schema:
+            type: string
+        - name: ikonomicheskaDeynost
+          in: query
+          schema:
+            type: string
+        - name: celevGrupa
+          in: query
+          schema:
+            type: string
+        - name: socialnaKauza
+          in: query
+          schema:
+            type: string
+        - name: socialnaInovaciya
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Списък с предприятия
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Enterprise"
+    post:
+      operationId: createEnterprise
+      tags: [enterprises]
+      summary: Добавяне на ново предприятие (admin)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EnterpriseInput"
+      responses:
+        "201":
+          description: Създадено
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Enterprise"
+
+  /enterprises/{id}:
+    get:
+      operationId: getEnterprise
+      tags: [enterprises]
+      summary: Детайли за предприятие
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Предприятие
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Enterprise"
+        "404":
+          description: Не е намерено
+    patch:
+      operationId: updateEnterprise
+      tags: [enterprises]
+      summary: Редактиране на предприятие (admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EnterpriseUpdate"
+      responses:
+        "200":
+          description: Актуализирано
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Enterprise"
+    delete:
+      operationId: deleteEnterprise
+      tags: [enterprises]
+      summary: Изтриване на предприятие (admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Изтрито
+
+  /enterprises/stats/summary:
+    get:
+      operationId: getEnterpriseStats
+      tags: [stats]
+      summary: Обобщена статистика за предприятията
+      responses:
+        "200":
+          description: Статистика
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EnterpriseStats"
+
+  /enterprises/stats/by-oblast:
+    get:
+      operationId: getEnterprisesByOblast
+      tags: [stats]
+      summary: Разпределение по области
+      responses:
+        "200":
+          description: По области
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/OblastCount"
+
+  /enterprises/stats/by-sector:
+    get:
+      operationId: getEnterprisesBySector
+      tags: [stats]
+      summary: Разпределение по сектор
+      responses:
+        "200":
+          description: По сектор
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SectorCount"
+
+  /enterprises/stats/by-kauza:
+    get:
+      operationId: getEnterprisesByKauza
+      tags: [stats]
+      summary: Разпределение по социална кауза
+      responses:
+        "200":
+          description: По кауза
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/KauzaCount"
+
+  /events:
+    get:
+      operationId: listEvents
+      tags: [events]
+      summary: Списък с предстоящи събития
+      responses:
+        "200":
+          description: Събития
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Event"
+    post:
+      operationId: createEvent
+      tags: [events]
+      summary: Добавяне на събитие (admin)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EventInput"
+      responses:
+        "201":
+          description: Създадено
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Event"
+
+  /events/{id}:
+    get:
+      operationId: getEvent
+      tags: [events]
+      summary: Детайли за събитие
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Събитие
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Event"
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +270,303 @@ components:
       required:
         - status
 
+    Enterprise:
+      type: object
+      required:
+        - id
+        - naimenovanie
+        - oblast
+        - grad
+        - lat
+        - lng
+        - klas
+        - pravnaForma
+        - ikonomicheskaDeynost
+        - celevnaGrupa
+        - socialnaKauza
+        - kratkoOpisanie
+      properties:
+        id:
+          type: integer
+        naimenovanie:
+          type: string
+        eik:
+          type: ["string", "null"]
+        oblast:
+          type: string
+        grad:
+          type: string
+        adres:
+          type: ["string", "null"]
+        lat:
+          type: number
+        lng:
+          type: number
+        klas:
+          type: string
+          description: "Клас А или Клас А+"
+        pravnaForma:
+          type: string
+        ikonomicheskaDeynost:
+          type: string
+        celevnaGrupa:
+          type: string
+        socialnaKauza:
+          type: string
+        socialnaInovaciya:
+          type: ["string", "null"]
+        kratkoOpisanie:
+          type: string
+        misiya:
+          type: ["string", "null"]
+        telefon:
+          type: ["string", "null"]
+        email:
+          type: ["string", "null"]
+        website:
+          type: ["string", "null"]
+        facebook:
+          type: ["string", "null"]
+        logoUrl:
+          type: ["string", "null"]
+        producti:
+          type: ["string", "null"]
+        uslugi:
+          type: ["string", "null"]
+        broyZaeti:
+          type: ["integer", "null"]
+        broyUyazvimiLica:
+          type: ["integer", "null"]
+        godinaZastoyvane:
+          type: ["integer", "null"]
+        istoriyaNaUspeha:
+          type: ["string", "null"]
+
+    EnterpriseInput:
+      type: object
+      required:
+        - naimenovanie
+        - oblast
+        - grad
+        - lat
+        - lng
+        - klas
+        - pravnaForma
+        - ikonomicheskaDeynost
+        - celevnaGrupa
+        - socialnaKauza
+        - kratkoOpisanie
+      properties:
+        naimenovanie:
+          type: string
+        eik:
+          type: string
+        oblast:
+          type: string
+        grad:
+          type: string
+        adres:
+          type: string
+        lat:
+          type: number
+        lng:
+          type: number
+        klas:
+          type: string
+        pravnaForma:
+          type: string
+        ikonomicheskaDeynost:
+          type: string
+        celevnaGrupa:
+          type: string
+        socialnaKauza:
+          type: string
+        socialnaInovaciya:
+          type: string
+        kratkoOpisanie:
+          type: string
+        misiya:
+          type: string
+        telefon:
+          type: string
+        email:
+          type: string
+        website:
+          type: string
+        facebook:
+          type: string
+        logoUrl:
+          type: string
+        producti:
+          type: string
+        uslugi:
+          type: string
+        broyZaeti:
+          type: integer
+        broyUyazvimiLica:
+          type: integer
+        godinaZastoyvane:
+          type: integer
+        istoriyaNaUspeha:
+          type: string
+
+    EnterpriseUpdate:
+      type: object
+      properties:
+        naimenovanie:
+          type: string
+        eik:
+          type: string
+        oblast:
+          type: string
+        grad:
+          type: string
+        adres:
+          type: string
+        lat:
+          type: number
+        lng:
+          type: number
+        klas:
+          type: string
+        pravnaForma:
+          type: string
+        ikonomicheskaDeynost:
+          type: string
+        celevnaGrupa:
+          type: string
+        socialnaKauza:
+          type: string
+        socialnaInovaciya:
+          type: string
+        kratkoOpisanie:
+          type: string
+        misiya:
+          type: string
+        telefon:
+          type: string
+        email:
+          type: string
+        website:
+          type: string
+        facebook:
+          type: string
+        logoUrl:
+          type: string
+        producti:
+          type: string
+        uslugi:
+          type: string
+        broyZaeti:
+          type: integer
+        broyUyazvimiLica:
+          type: integer
+        godinaZastoyvane:
+          type: integer
+        istoriyaNaUspeha:
+          type: string
+
+    EnterpriseStats:
+      type: object
+      required:
+        - totalEnterprises
+        - totalZaeti
+        - totalUyazvimiLica
+        - totalInovacii
+        - totalKauzi
+        - totalSabytiya
+      properties:
+        totalEnterprises:
+          type: integer
+        totalZaeti:
+          type: integer
+        totalUyazvimiLica:
+          type: integer
+        totalInovacii:
+          type: integer
+        totalKauzi:
+          type: integer
+        totalSabytiya:
+          type: integer
+
+    OblastCount:
+      type: object
+      required:
+        - oblast
+        - count
+      properties:
+        oblast:
+          type: string
+        count:
+          type: integer
+
+    SectorCount:
+      type: object
+      required:
+        - sector
+        - count
+      properties:
+        sector:
+          type: string
+        count:
+          type: integer
+
+    KauzaCount:
+      type: object
+      required:
+        - kauza
+        - count
+      properties:
+        kauza:
+          type: string
+        count:
+          type: integer
+
+    Event:
+      type: object
+      required:
+        - id
+        - zaglavia
+        - data
+        - vid
+        - opisanie
+      properties:
+        id:
+          type: integer
+        zaglavia:
+          type: string
+        data:
+          type: string
+        vid:
+          type: string
+        opisanie:
+          type: string
+        myasto:
+          type: ["string", "null"]
+        organizator:
+          type: ["string", "null"]
+        linkRegistraciya:
+          type: ["string", "null"]
+
+    EventInput:
+      type: object
+      required:
+        - zaglavia
+        - data
+        - vid
+        - opisanie
+      properties:
+        zaglavia:
+          type: string
+        data:
+          type: string
+        vid:
+          type: string
+        opisanie:
+          type: string
+        myasto:
+          type: string
+        organizator:
+          type: string
+        linkRegistraciya:
+          type: string
