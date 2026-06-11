@@ -1,6 +1,6 @@
 import { Router, type IRouter } from "express";
 import { eq, and, ilike, or, sql } from "drizzle-orm";
-import { db, enterprisesTable } from "@workspace/db";
+import { db, enterprisesTable, eventsTable } from "@workspace/db";
 import {
   ListEnterprisesQueryParams,
   ListEnterprisesResponse,
@@ -21,6 +21,7 @@ const router: IRouter = Router();
 
 router.get("/enterprises/stats/summary", async (_req, res): Promise<void> => {
   const enterprises = await db.select().from(enterprisesTable);
+  const [{ count: eventsCount }] = await db.select({ count: sql<number>`count(*)::int` }).from(eventsTable);
   const totalEnterprises = enterprises.length;
   const totalZaeti = enterprises.reduce((s, e) => s + (e.broyZaeti ?? 0), 0);
   const totalUyazvimiLica = enterprises.reduce((s, e) => s + (e.broyUyazvimiLica ?? 0), 0);
@@ -33,7 +34,7 @@ router.get("/enterprises/stats/summary", async (_req, res): Promise<void> => {
     totalUyazvimiLica,
     totalInovacii,
     totalKauzi,
-    totalSabytiya: 0,
+    totalSabytiya: eventsCount,
   }));
 });
 
