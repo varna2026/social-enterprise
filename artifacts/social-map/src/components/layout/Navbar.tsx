@@ -34,12 +34,11 @@ export default function Navbar() {
           {/* Logo + Title + Description */}
           <Link href="/" className="flex items-center gap-4 min-w-0">
             {/* Animated GIF icon */}
-            <div className="w-14 h-14 rounded-full bg-[#2E9E8F] flex items-center justify-center shrink-0 overflow-hidden">
+            <div className="w-14 h-14 rounded-full bg-[#2E9E8F] flex items-center justify-center shrink-0">
               <img
                 src={`${BASE}/si-logo-white.gif`}
                 alt="Социална иновация"
-                className="w-12 h-12 object-contain"
-                style={{ mixBlendMode: "multiply" }}
+                className="w-11 h-11 object-contain rounded-full"
               />
             </div>
 
