@@ -3,46 +3,16 @@ import { Building2, Shield, Menu, X, Map } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
-function SocialKartaLogo({ size = 48 }: { size?: number }) {
-  const cx = size / 2;
-  const cy = size / 2;
-  const r = size / 2 - 2;
-  const gap = 4;
+const BASE = import.meta.env.BASE_URL.replace(/\/$/, "");
 
-  const arc = (startDeg: number, endDeg: number, color: string) => {
-    const toRad = (d: number) => ((d - 90) * Math.PI) / 180;
-    const s = toRad(startDeg + gap / 2);
-    const e = toRad(endDeg - gap / 2);
-    const x1 = cx + r * Math.cos(s);
-    const y1 = cy + r * Math.sin(s);
-    const x2 = cx + r * Math.cos(e);
-    const y2 = cy + r * Math.sin(e);
-    const large = endDeg - startDeg > 180 ? 1 : 0;
-    return (
-      <path
-        key={startDeg}
-        d={`M ${cx} ${cy} L ${x1.toFixed(2)} ${y1.toFixed(2)} A ${r} ${r} 0 ${large} 1 ${x2.toFixed(2)} ${y2.toFixed(2)} Z`}
-        fill={color}
-      />
-    );
-  };
-
-  const d = size * 0.13;
-
+function MapPinDoodle() {
   return (
-    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} xmlns="http://www.w3.org/2000/svg">
-      {arc(0,   45,  "#5BB8B0")}
-      {arc(45,  90,  "#C8C8C8")}
-      {arc(90,  135, "#9E9E9E")}
-      {arc(135, 180, "#F07840")}
-      {arc(180, 225, "#9E9E9E")}
-      {arc(225, 270, "#5BB8B0")}
-      {arc(270, 315, "#C8C8C8")}
-      {arc(315, 360, "#9E9E9E")}
-      <polygon
-        points={`${cx},${cy - d} ${cx + d},${cy} ${cx},${cy + d} ${cx - d},${cy}`}
-        fill="#F5C030"
-      />
+    <svg width="90" height="70" viewBox="0 0 90 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="20" cy="20" r="10" fill="none" stroke="#5BB8B0" strokeWidth="1.5" />
+      <line x1="20" y1="30" x2="20" y2="60" stroke="#5BB8B0" strokeWidth="1.5" />
+      <polygon points="16,60 20,70 24,60" fill="#5BB8B0" />
+      <path d="M 30 40 Q 50 20 70 35 Q 80 42 85 38" stroke="#5BB8B0" strokeWidth="1.5" strokeDasharray="4 3" fill="none" />
+      <circle cx="85" cy="38" r="4" fill="none" stroke="#5BB8B0" strokeWidth="1.5" />
     </svg>
   );
 }
@@ -59,25 +29,53 @@ export default function Navbar() {
   return (
     <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
-          <div className="flex items-center">
-            <Link href="/" className="flex items-center gap-3">
-              <SocialKartaLogo size={48} />
-              <div className="hidden sm:flex flex-col leading-none">
-                <span className="text-xl font-black tracking-widest uppercase text-foreground leading-tight">
+        <div className="flex items-center justify-between py-3 gap-4">
+
+          {/* Logo + Title + Description */}
+          <Link href="/" className="flex items-center gap-4 min-w-0">
+            {/* Animated GIF icon */}
+            <div className="w-14 h-14 rounded-full bg-[#2E9E8F] flex items-center justify-center shrink-0 overflow-hidden">
+              <img
+                src={`${BASE}/si-logo-white.gif`}
+                alt="Социална иновация"
+                className="w-12 h-12 object-contain"
+              />
+            </div>
+
+            {/* СОЦИАЛНА КАРТА + description */}
+            <div className="hidden sm:flex flex-col leading-none min-w-0">
+              <div className="flex flex-col leading-none">
+                <span className="text-2xl font-black tracking-widest uppercase text-foreground leading-tight">
                   Социална
                 </span>
-                <span className="text-xl font-black tracking-widest uppercase text-[#5BB8B0] leading-tight">
+                <span className="text-2xl font-black tracking-widest uppercase text-[#5BB8B0] leading-tight">
                   Карта
                 </span>
-                <span className="text-[9px] text-muted-foreground tracking-wide leading-tight mt-0.5">
-                  Интерактивна карта · Североизточен район
-                </span>
               </div>
-            </Link>
+              <span className="text-[10px] text-muted-foreground mt-1 leading-tight max-w-[200px]">
+                Открий социалните предприятия, техните каузи, продукти, услуги и социални иновации.
+              </span>
+            </div>
+          </Link>
+
+          {/* Divider + Info text + Map doodle */}
+          <div className="hidden lg:flex items-center gap-3 border-l pl-5 ml-2">
+            <div className="flex flex-col gap-0.5">
+              <span className="text-xs font-medium text-foreground leading-tight">
+                Интерактивна карта
+              </span>
+              <span className="text-xs text-muted-foreground leading-tight">
+                на социалните предприятия
+              </span>
+              <span className="text-xs text-muted-foreground leading-tight">
+                в Североизточен район
+              </span>
+            </div>
+            <MapPinDoodle />
           </div>
 
-          <div className="hidden md:flex md:items-center md:space-x-1">
+          {/* Nav links */}
+          <div className="hidden md:flex md:items-center md:space-x-1 ml-auto shrink-0">
             {navLinks.map((link) => {
               const Icon = link.icon;
               const isActive = location === link.href;
@@ -96,7 +94,7 @@ export default function Navbar() {
                 </Link>
               );
             })}
-            <div className="ml-4 pl-4 border-l">
+            <div className="ml-3 pl-3 border-l">
               <Link href="/admin">
                 <Button variant="outline" size="sm" className="gap-2">
                   <Shield className="h-4 w-4" />
@@ -106,7 +104,8 @@ export default function Navbar() {
             </div>
           </div>
 
-          <div className="flex md:hidden">
+          {/* Mobile menu button */}
+          <div className="flex md:hidden ml-auto">
             <Button
               variant="ghost"
               size="icon"
