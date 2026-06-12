@@ -39,6 +39,7 @@ export default function Navbar() {
                 src={`${BASE}/si-logo-white.gif`}
                 alt="Социална иновация"
                 className="w-12 h-12 object-contain"
+                style={{ mixBlendMode: "multiply" }}
               />
             </div>
 
