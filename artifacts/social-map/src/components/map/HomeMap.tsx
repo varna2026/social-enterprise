@@ -4,42 +4,23 @@ import { divIcon } from "leaflet";
 import { Enterprise } from "@workspace/api-client-react/src/generated/api.schemas";
 import { Skeleton } from "@/components/ui/skeleton";
 
-const ACTIVITY_COLORS: Record<string, string> = {
-  "Производство": "#16a34a",
-  "Услуги": "#2563eb",
-  "Социални услуги": "#9333ea",
-  "Земеделие": "#d97706",
-  "Обучения": "#ca8a04",
-  "Здраве и грижа": "#db2777",
-  "Рециклиране": "#0d9488",
-};
+const BASE = import.meta.env.BASE_URL.replace(/\/$/, "");
 
-function getMarkerIcon(enterprise: Enterprise, isSelected: boolean) {
-  const color = ACTIVITY_COLORS[enterprise.ikonomicheskaDeynost ?? ""] ?? "#6b7280";
-  if (isSelected) {
-    return divIcon({
-      html: `<div style="
-        width:16px;height:16px;border-radius:50%;
-        background:${color};
-        border:3px solid white;
-        box-shadow:0 0 0 2.5px ${color},0 3px 8px rgba(0,0,0,0.5);
-        transition:all .2s;
-      "></div>`,
-      className: "",
-      iconSize: [16, 16],
-      iconAnchor: [8, 8],
-    });
-  }
+function getMarkerIcon(isSelected: boolean) {
+  const size = isSelected ? 32 : 24;
+  const shadow = isSelected
+    ? "drop-shadow(0 0 4px rgba(0,0,0,0.6))"
+    : "drop-shadow(0 1px 2px rgba(0,0,0,0.35))";
   return divIcon({
-    html: `<div style="
-      width:11px;height:11px;border-radius:50%;
-      background:${color};
-      border:2px solid white;
-      box-shadow:0 1px 4px rgba(0,0,0,0.3);
-    "></div>`,
+    html: `<img src="${BASE}/marka-icon.png" style="
+      width:${size}px;height:${size}px;
+      object-fit:contain;
+      filter:${shadow};
+      transition:all .2s;
+    " />`,
     className: "",
-    iconSize: [11, 11],
-    iconAnchor: [5.5, 5.5],
+    iconSize: [size, size],
+    iconAnchor: [size / 2, size / 2],
   });
 }
 
@@ -88,7 +69,7 @@ export default function HomeMap({ enterprises, selectedId, onSelectEnterprise, i
         <Marker
           key={enterprise.id}
           position={[enterprise.lat!, enterprise.lng!]}
-          icon={getMarkerIcon(enterprise, enterprise.id === selectedId)}
+          icon={getMarkerIcon(enterprise.id === selectedId)}
           eventHandlers={{ click: () => onSelectEnterprise(enterprise) }}
         >
           <Tooltip direction="top" offset={[0, -6]} className="enterprise-name-tooltip">
