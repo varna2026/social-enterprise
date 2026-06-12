@@ -242,9 +242,9 @@ export default function EnterpriseDetail() {
 
             {/* Social Innovation logo */}
             <div className="flex flex-col items-center gap-2 pt-3 border-t mt-1">
-              <div className="w-full rounded-xl bg-[#2E9E8F] flex items-center justify-center py-3 px-4">
+              <div className="w-full rounded-xl bg-black flex items-center justify-center py-3 px-4">
                 <img
-                  src={`${BASE}/social-innovation-logo.gif`}
+                  src={`${BASE}/social-innovation-logo-color.gif`}
                   alt="Социална иновация"
                   className="h-16 object-contain"
                 />
