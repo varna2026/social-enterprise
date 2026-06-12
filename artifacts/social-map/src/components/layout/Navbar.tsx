@@ -29,13 +29,13 @@ export default function Navbar() {
               </div>
               <div className="hidden sm:flex flex-col leading-none">
                 <span className="text-xl font-black tracking-widest uppercase text-foreground leading-tight">
-                  Социална
+                  Социален
                 </span>
                 <span className="text-xl font-black tracking-widest uppercase text-[#2E9E8F] leading-tight">
-                  Карта
+                  Компас
                 </span>
                 <span className="text-[9px] text-muted-foreground tracking-wide leading-tight mt-0.5">
-                  Интерактивна карта · Североизточен район
+                  Навигатор към социалните предприятия
                 </span>
               </div>
             </Link>
