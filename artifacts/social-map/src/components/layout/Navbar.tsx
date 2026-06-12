@@ -46,7 +46,7 @@ export default function Navbar() {
             <div className="hidden sm:flex flex-col leading-none min-w-0">
               <div className="flex flex-col leading-none">
                 <span className="text-2xl font-black tracking-widest uppercase text-foreground leading-tight">
-                  Социална
+                  Интерактивна
                 </span>
                 <span className="text-2xl font-black tracking-widest uppercase text-[#5BB8B0] leading-tight">
                   Карта
