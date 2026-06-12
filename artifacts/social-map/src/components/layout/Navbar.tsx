@@ -58,21 +58,6 @@ export default function Navbar() {
             </div>
           </Link>
 
-          {/* Divider + Info text + Map doodle */}
-          <div className="hidden lg:flex items-center gap-3 border-l pl-5 ml-2">
-            <div className="flex flex-col gap-0.5">
-              <span className="text-xs font-medium text-foreground leading-tight">
-                Интерактивна карта
-              </span>
-              <span className="text-xs text-muted-foreground leading-tight">
-                на социалните предприятия
-              </span>
-              <span className="text-xs text-muted-foreground leading-tight">
-                в Североизточен район
-              </span>
-            </div>
-            <MapPinDoodle />
-          </div>
 
           {/* Nav links */}
           <div className="hidden md:flex md:items-center md:space-x-1 ml-auto shrink-0">
