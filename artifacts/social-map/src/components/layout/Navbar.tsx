@@ -1,7 +1,40 @@
 import { Link, useLocation } from "wouter";
-import { Map, Building2, Shield, Menu, X } from "lucide-react";
+import { Building2, Shield, Menu, X, Map } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+
+function SocialMapLogo({ size = 40 }: { size?: number }) {
+  const cx = size / 2;
+  const cy = size / 2;
+  const r = size / 2 - 1;
+
+  const pt = (deg: number) => {
+    const rad = (deg - 90) * (Math.PI / 180);
+    return `${(cx + r * Math.cos(rad)).toFixed(2)} ${(cy + r * Math.sin(rad)).toFixed(2)}`;
+  };
+
+  const seg = (a1: number, a2: number, color: string) =>
+    `M ${cx} ${cy} L ${pt(a1)} A ${r} ${r} 0 0 1 ${pt(a2)} Z`;
+
+  const d = size * 0.14;
+
+  return (
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} xmlns="http://www.w3.org/2000/svg">
+      <path d={seg(0, 45, "")} fill="#4AADA2" />
+      <path d={seg(45, 90, "")} fill="#C0C0C0" />
+      <path d={seg(90, 135, "")} fill="#F07840" />
+      <path d={seg(135, 180, "")} fill="#888888" />
+      <path d={seg(180, 225, "")} fill="#4AADA2" />
+      <path d={seg(225, 270, "")} fill="#C0C0C0" />
+      <path d={seg(270, 315, "")} fill="#F5C030" />
+      <path d={seg(315, 360, "")} fill="#888888" />
+      <polygon
+        points={`${cx},${cy - d} ${cx + d},${cy} ${cx},${cy + d} ${cx - d},${cy}`}
+        fill="#F5C030"
+      />
+    </svg>
+  );
+}
 
 export default function Navbar() {
   const [location] = useLocation();
@@ -17,13 +50,17 @@ export default function Navbar() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center">
-            <Link href="/" className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-primary-foreground">
-                <Map className="h-5 w-5" />
+            <Link href="/" className="flex items-center gap-3">
+              <SocialMapLogo size={40} />
+              <div className="hidden sm:flex flex-col leading-tight">
+                <span className="text-lg font-black tracking-wide uppercase text-foreground leading-none">
+                  Социална{" "}
+                  <span className="text-[#4AADA2]">Карта</span>
+                </span>
+                <span className="text-[10px] text-muted-foreground leading-tight tracking-wide">
+                  Интерактивна карта на социалните предприятия
+                </span>
               </div>
-              <span className="text-lg font-bold tracking-tight text-foreground hidden sm:block">
-                Социални Предприятия СИР
-              </span>
             </Link>
           </div>
 
