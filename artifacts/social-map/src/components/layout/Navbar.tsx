@@ -79,14 +79,16 @@ export default function Navbar() {
                 </Link>
               );
             })}
-            <div className="ml-3 pl-3 border-l">
-              <Link href="/admin">
-                <Button variant="outline" size="sm" className="gap-2">
-                  <Shield className="h-4 w-4" />
-                  Админ
-                </Button>
-              </Link>
-            </div>
+            {import.meta.env.VITE_STATIC_MODE !== "true" && (
+              <div className="ml-3 pl-3 border-l">
+                <Link href="/admin">
+                  <Button variant="outline" size="sm" className="gap-2">
+                    <Shield className="h-4 w-4" />
+                    Админ
+                  </Button>
+                </Link>
+              </div>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -125,14 +127,16 @@ export default function Navbar() {
                 </Link>
               );
             })}
-            <Link
-              href="/admin"
-              onClick={() => setIsOpen(false)}
-              className="flex items-center gap-2 px-3 py-2 text-base font-medium rounded-md text-muted-foreground hover:bg-accent/10 hover:text-accent"
-            >
-              <Shield className="h-5 w-5" />
-              Админ
-            </Link>
+            {import.meta.env.VITE_STATIC_MODE !== "true" && (
+              <Link
+                href="/admin"
+                onClick={() => setIsOpen(false)}
+                className="flex items-center gap-2 px-3 py-2 text-base font-medium rounded-md text-muted-foreground hover:bg-accent/10 hover:text-accent"
+              >
+                <Shield className="h-5 w-5" />
+                Админ
+              </Link>
+            )}
           </div>
         </div>
       )}

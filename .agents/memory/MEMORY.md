@@ -1,0 +1,1 @@
+- [Static GitHub Pages build](static-github-pages.md) — social-enterprise-north.replit.app + static version at varna2026.github.io/social-enterprise; build via vite.config.static.ts + alias trick for api-client-react.
