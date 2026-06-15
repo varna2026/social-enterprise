@@ -26,6 +26,13 @@ const COORDINATE_FIXES: Array<{ id: number; lat: number; lng: number; note: stri
   { id: 28, lat: 43.228,    lng: 27.9630,   note: "жк Бриз, ул. Пападополу 47" },
   { id: 40, lat: 43.2130,   lng: 27.8780,   note: "ул. Петлешев 37А, жк Младост" },
   { id: 50, lat: 43.2085,   lng: 27.8780,   note: "ул. Петлешев 1, жк Младост" },
+  // Round 2 — enterprises placed in the Black Sea
+  { id: 47, lat: 43.2108,   lng: 27.9195,   note: "бул. Генерал Колев 66 (беше в морето)" },
+  { id: 42, lat: 43.2180,   lng: 27.9210,   note: "ул. Мир 35, р-н Приморски (беше в морето)" },
+  { id: 72, lat: 43.2150,   lng: 27.9120,   note: "ФЕРМИ БГ — без адрес, преместено от морето" },
+  { id: 53, lat: 43.2100,   lng: 27.9050,   note: "ЕВРО РЕМОНТ — без адрес, преместено от морето" },
+  { id: 23, lat: 43.1930,   lng: 27.9180,   note: "Фондация Живот Синдром на Даун — Аспарухово, inland" },
+  { id: 69, lat: 43.2540,   lng: 27.9450,   note: "Имотел — без адрес, преместено от морето" },
 ];
 
 export async function runCoordinateFixes(): Promise<void> {
