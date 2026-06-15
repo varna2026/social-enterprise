@@ -156,10 +156,23 @@ async function main() {
     `\n   Images: ${downloaded} downloaded, ${skipped} already cached, ${failed} failed`
   );
 
+  const oblastNorm = {
+    "Varna": "Варна",
+    "Dobrich": "Добрич",
+    "Shumen": "Шумен",
+    "Targovishte": "Търговище",
+    "Търговище ": "Търговище",
+    "Варна ": "Варна",
+  };
+  const normalized = enterprises.map((e) => ({
+    ...e,
+    oblast: oblastNorm[e.oblast] ?? e.oblast,
+  }));
+
   console.log("\n💾 Writing enterprises.json...");
   await fsp.writeFile(
     path.join(PUBLIC_DATA, "enterprises.json"),
-    JSON.stringify(enterprises, null, 2),
+    JSON.stringify(normalized, null, 2),
     "utf-8"
   );
 
