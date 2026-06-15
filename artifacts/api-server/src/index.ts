@@ -1,5 +1,6 @@
 import app from "./app";
 import { logger } from "./lib/logger";
+import { runCoordinateFixes } from "./migrations/fix-coordinates";
 
 const rawPort = process.env["PORT"];
 
@@ -14,6 +15,10 @@ const port = Number(rawPort);
 if (Number.isNaN(port) || port <= 0) {
   throw new Error(`Invalid PORT value: "${rawPort}"`);
 }
+
+runCoordinateFixes().catch((err) => {
+  logger.warn({ err }, "Coordinate fixes migration failed (non-fatal)");
+});
 
 app.listen(port, (err) => {
   if (err) {
