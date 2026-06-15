@@ -142,17 +142,38 @@ async function main() {
       `\n   Images: ${downloaded} downloaded, ${skipped} already cached, ${failed} failed`
     );
 
+    function snakeToCamel(str) {
+      return str.replace(/_([a-z])/g, (_, c) => c.toUpperCase());
+    }
+
+    const FIELD_RENAMES = {
+      sotsialnaKauza: "socialnaKauza",
+      sotsialnaInovaciya: "socialnaInovaciya",
+    };
+
+    function convertRow(row) {
+      return Object.fromEntries(
+        Object.entries(row).map(([k, v]) => {
+          const camel = snakeToCamel(k);
+          return [FIELD_RENAMES[camel] ?? camel, v];
+        })
+      );
+    }
+
+    const enterprisesCamel = enterprises.map(convertRow);
+    const eventsCamel = events.map(convertRow);
+
     console.log("\n💾 Writing enterprises.json...");
     await fsp.writeFile(
       path.join(PUBLIC_DATA, "enterprises.json"),
-      JSON.stringify(enterprises, null, 2),
+      JSON.stringify(enterprisesCamel, null, 2),
       "utf-8"
     );
 
     console.log("💾 Writing events.json...");
     await fsp.writeFile(
       path.join(PUBLIC_DATA, "events.json"),
-      JSON.stringify(events, null, 2),
+      JSON.stringify(eventsCamel, null, 2),
       "utf-8"
     );
 
