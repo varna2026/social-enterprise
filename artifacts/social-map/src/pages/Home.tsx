@@ -16,8 +16,9 @@ const OBLASTI = ["Варна", "Добрич", "Шумен", "Търговище
 const VID_DEYNOST_OPTIONS = ["Производство", "Услуги", "Социални услуги", "Земеделие", "Обучения"];
 const KAUZA_OPTIONS = ["Хора с увреждания", "Деца и младежи", "Социално включване"];
 
-function parseImages(raw?: string | null): string[] {
+function parseImages(raw?: string | string[] | null): string[] {
   if (!raw) return [];
+  if (Array.isArray(raw)) return raw;
   try { return JSON.parse(raw); } catch { return []; }
 }
 

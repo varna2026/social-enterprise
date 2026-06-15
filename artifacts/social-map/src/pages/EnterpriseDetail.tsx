@@ -8,8 +8,9 @@ import { MapContainer, TileLayer, Marker } from "react-leaflet";
 
 const BASE = import.meta.env.BASE_URL.replace(/\/$/, "");
 
-function parseImages(raw?: string | null): string[] {
+function parseImages(raw?: string | string[] | null): string[] {
   if (!raw) return [];
+  if (Array.isArray(raw)) return raw;
   try { return JSON.parse(raw); } catch { return []; }
 }
 
