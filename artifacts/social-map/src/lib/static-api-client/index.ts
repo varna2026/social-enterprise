@@ -19,10 +19,11 @@ async function loadEnterprises(): Promise<Enterprise[]> {
   return _cache;
 }
 
+const PROD_ORIGIN = "https://social-enterprise-north.replit.app";
+
 function transformImageUrl(url: string): string {
-  if (url.includes("/api/storage/objects/uploads/")) {
-    const uuid = url.split("/").pop();
-    return `${BASE}data/images/${uuid}`;
+  if (url.startsWith("/api/storage/objects/uploads/")) {
+    return `${PROD_ORIGIN}${url}`;
   }
   return url;
 }
